@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">PaySample</string>
+    <string name="action_history">Records</string>
+    <string name="message_current_id">Current user\'s ID：%1$s</string>
+    <string name="button_buy">Purchase</string>
+    <string name="message_gold">Gold coin</string>
+    <string name="product_gold_50">50 gold coins</string>
+    <string name="product_gold_100">100 gold coins</string>
+    <string name="message_buy_history">Purchase records</string>
+    <string name="message_buy_successful">Purchase successful</string>
+    <string name="fb_app_id">507402232801098</string>
+</resources>

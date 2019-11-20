@@ -1,0 +1,10 @@
+<resources>
+    <string name="action_history">記錄</string>
+    <string name="message_current_id">當前玩家ID：%1$s</string>
+    <string name="button_buy">購買</string>
+    <string name="message_gold">金幣</string>
+    <string name="product_gold_50">50金幣</string>
+    <string name="product_gold_100">100金幣</string>
+    <string name="message_buy_history">購買記錄</string>
+    <string name="message_buy_successful">購買成功</string>
+</resources>

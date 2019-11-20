@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:gravity="center"
+              android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btn_products"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/colorPrimary"
+        android:onClick="queryProducts"
+        android:text="mQooAppOpenSDK.queryProducts()"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"/>
+
+    <Button
+        android:id="@+id/btn_purchased"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/colorPrimary"
+        android:onClick="getPurchasedRecords"
+        android:text="mQooAppOpenSDK.restorePurchases()"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"/>
+
+
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:choiceMode="singleChoice"
+        android:divider="#f0f0f0"
+        android:dividerHeight="1dp"
+        android:orientation="vertical"
+        android:visibility="gone"/>
+</LinearLayout>

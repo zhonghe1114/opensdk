@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/layout_init"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btn_select"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorPrimary"
+            android:gravity="center"
+            android:text="{app_id}▼"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"/>
+
+        <EditText
+            android:id="@+id/edt_appId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="App ID" />
+
+        <Button
+            android:id="@+id/btn_init"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:text="QooAppOpenSDK.initialize()"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"/>
+    </LinearLayout>
+
+    <include
+        android:id="@+id/layout_verify"
+        layout="@layout/layout_verify"
+        android:background="@android:color/white"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/layout_login"
+        layout="@layout/layout_login"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/layout_products"
+        layout="@layout/layout_products"
+        android:visibility="gone" />
+</FrameLayout>
