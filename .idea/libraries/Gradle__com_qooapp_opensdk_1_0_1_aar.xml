@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: com.qooapp:opensdk:1.0.1@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c3f7e8cf5871d7d368744a204f8b2e4c/opensdk-1.0.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c3f7e8cf5871d7d368744a204f8b2e4c/opensdk-1.0.1/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.qooapp/opensdk/1.0.1/84698e8bea4f115da3c2c7fdfd1f44e442e75a98/opensdk-1.0.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.qooapp/opensdk/1.0.1/6621ee9cc158e0ce1b5db3f1962626f9c501714c/opensdk-1.0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

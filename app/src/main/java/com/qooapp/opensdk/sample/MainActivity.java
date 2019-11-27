@@ -110,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
         mDataList = CacheUtil.getChannels(MainActivity.this);
         mBtnSelect.setVisibility(mDataList.size() > 0 ? View.VISIBLE : View.GONE);
         mAppId = SharedPrefsUtils.getStringPreference(MainActivity.this, KEY_APP_ID);
+//        mAppId = "BETA75d5fae60b5e11ea8d1b061ac4f87ae8";
+//        mAppId = "BETAfad266b20b5411ea8b28061ac4f87ae8";
         mEdtAppId.setText(mAppId);
         mBtnSelect.setText(mAppId + "   ▼");
     }
@@ -177,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("mQooAppOpenSDK", "response = "+response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    mUserId = jsonObject.getString("user_id");
+                    mUserId = jsonObject.getJSONObject("data").getString("user_id");
                     SharedPrefsUtils.setStringPreference(MainActivity.this, KEY_USERID, mUserId);
                 } catch (JSONException e) {
                     e.printStackTrace();
