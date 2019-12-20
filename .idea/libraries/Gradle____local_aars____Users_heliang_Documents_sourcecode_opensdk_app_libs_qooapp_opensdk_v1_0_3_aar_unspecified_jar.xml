@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: __local_aars__:/Users/heliang/Documents/sourcecode/opensdk/app/libs/qooapp-opensdk-v1.0.3.aar:unspecified@jar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/4074ce5f08c2b6a41867893e6b795e4d/qooapp-opensdk-v1.0.3/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/4074ce5f08c2b6a41867893e6b795e4d/qooapp-opensdk-v1.0.3/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d020695f583f2e298e1e991cfa424bbf/qooapp-opensdk-v1.0.3/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d020695f583f2e298e1e991cfa424bbf/qooapp-opensdk-v1.0.3/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

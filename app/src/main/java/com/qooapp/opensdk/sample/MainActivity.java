@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("QooAppOpenSDK: Initialize");
+        setTitle("QooAppOpenSDK: Initialize  v"+BuildConfig.VERSION_NAME);
 
         mEdtAppId = this.findViewById(R.id.edt_appId);
         Button btnInit = this.findViewById(R.id.btn_init);
@@ -459,7 +459,7 @@ public class MainActivity extends AppCompatActivity {
         mLayoutProducts.setVisibility(View.GONE);
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        setTitle("QooAppOpenSDK: Initialize");
+        setTitle("QooAppOpenSDK: Initialize  v"+BuildConfig.VERSION_NAME);
     }
 
     private void showProgress() {
