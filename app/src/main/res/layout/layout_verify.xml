@@ -13,7 +13,6 @@
         android:background="@color/colorPrimary"
         android:text="mQooAppOpenSDK.checkLicense()"
         android:textColor="@android:color/white"
-        android:onClick="checkLicense"
         android:textAllCaps="false"/>
     <TextView
         android:id="@+id/btn_skip"

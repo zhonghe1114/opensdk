@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PaySample</string>
+    <string name="app_name">OpenSdkAnd</string>
     <string name="action_history">Records</string>
     <string name="message_current_id">Current user\'s ID：%1$s</string>
     <string name="button_buy">Purchase</string>

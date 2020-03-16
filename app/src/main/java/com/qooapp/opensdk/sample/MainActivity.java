@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,7 +38,7 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private final String TAG = "MainActivity";
 
     //Your app id
     private String mAppId = "Your app id";
@@ -50,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
     private QooAppOpenSDK mQooAppOpenSDK;
     private View mLayoutInit;
     private View mLayoutCheckLicense;
-    private View mLayoutLogin;
     private View mLayoutProducts;
     private String mUserId;
     private ListView mListView;
@@ -63,11 +61,93 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private int mSelected;
 
+    /**
+     * 错误
+     */
+    private final int TYPE_ERROR = 0;
+
+    /**
+     * 登录
+     */
+    private final int TYPE_LOGIN = 1;
+    /**
+     * 校验
+     */
+    private final int TYPE_VERIFY = 2;
+    /**
+     * 查询产品
+     */
+    private final int TYPE_QUERY_PRODUCT = 3;
+    /**
+     * 恢复购买
+     */
+    private final int TYPE_QUERY_RECORD = 4;
+
+    private QooAppCallback mInitCallback = new QooAppCallback() {
+        @Override
+        public void onSuccess(String response) {
+
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                mUserId = jsonObject.getJSONObject("data").getString("user_id");
+                SharedPrefsUtils.setStringPreference(MainActivity.this, KEY_USERID, mUserId);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            displayResult(TYPE_LOGIN, response);
+            hideProgress();
+        }
+
+        @Override
+        public void onError(String error) {
+            displayResult(TYPE_ERROR, error);
+            hideProgress();
+        }
+    };
+
+    private PaymentCallback mPaymentCallback = new PaymentCallback() {
+        @Override
+        public void onComplete(String json) {
+
+            //Handle success case
+            try {
+                JSONObject obj = new JSONObject(json);
+                JSONObject jsonObject = obj.getJSONObject("data");
+                //We have product. Consuming it.
+                String purchase_id = jsonObject.optString("purchase_id");
+                final String token = jsonObject.optString("token");
+                consumePurchase(token, purchase_id);
+                String product_id = jsonObject.optString("product_id");
+                mQooAppOpenSDK.closePaymentUI();
+                showToast(MainActivity.this, "Purchasing successful，Consuming...[purchase_id:" + purchase_id + ",product_id:" + product_id + ",token:" + token);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onError(String error) {
+            showToast(MainActivity.this, "Error:" + error);
+        }
+
+        @Override
+        public void onCancel() {
+            showToast(MainActivity.this, "Be canceled");
+        }
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("QooAppOpenSDK: Initialize  v"+BuildConfig.VERSION_NAME);
+
+        initView();
+        initLocalData();
+    }
+
+    private void initView() {
 
         mEdtAppId = this.findViewById(R.id.edt_appId);
         Button btnInit = this.findViewById(R.id.btn_init);
@@ -75,34 +155,85 @@ public class MainActivity extends AppCompatActivity {
         mBtnProducts = this.findViewById(R.id.btn_products);
         mLayoutInit = this.findViewById(R.id.layout_init);
         mLayoutCheckLicense = this.findViewById(R.id.layout_verify);
-        mLayoutLogin = this.findViewById(R.id.layout_login);
         mLayoutProducts = this.findViewById(R.id.layout_products);
         mBtnPurchased = this.findViewById(R.id.btn_purchased);
         mListView = this.findViewById(R.id.list_view);
-        initLocalData();
         btnInit.setOnClickListener(v -> {
             mAppId = mEdtAppId.getText().toString();
             SharedPrefsUtils.setStringPreference(MainActivity.this, KEY_APP_ID, mAppId);
             CacheUtil.saveChannel(MainActivity.this, mAppId);
             initQooAppOpenSDK();
-            showCheckLicense();
 
         });
 
+
         mBtnSelect.setOnClickListener(v -> showSelectChannel());
+
+        findViewById(R.id.btn_verify).setOnClickListener(v -> {
+            mQooAppOpenSDK.checkLicense(new QooAppCallback() {
+
+                @Override
+                public void onSuccess(String info) {
+                    // verification succeed
+                    displayResult(TYPE_VERIFY, info);
+                }
+
+                @Override
+                public void onError(String error) {
+                    // For unknown reason, verification cannot be done.
+                    // Please disallow access for proper protection.
+                    displayResult(TYPE_VERIFY, error);
+                }
+            });
+        });
+
+        findViewById(R.id.btn_products).setOnClickListener(v -> {
+            showProgress();
+            mQooAppOpenSDK.queryProducts(new QooAppCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    hideProgress();
+                    displayResult(TYPE_QUERY_PRODUCT, result);
+                }
+
+                @Override
+                public void onError(String error) {
+                    displayResult(TYPE_ERROR, error);
+                    hideProgress();
+                }
+            });
+        });
+
+        findViewById(R.id.btn_purchased).setOnClickListener(v -> {
+            showProgress();
+            mQooAppOpenSDK.restorePurchases(new QooAppCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    hideProgress();
+                    displayResult(TYPE_QUERY_RECORD, result);
+                }
+
+                @Override
+                public void onError(String error) {
+                    hideProgress();
+                    displayResult(TYPE_ERROR, error);
+                }
+            });
+        });
     }
 
     /**
-     * 初始化QooAppOpenSDK
+     * init QooAppOpenSDK
      */
     protected void initQooAppOpenSDK() {
-        if (mAppId != null && !"".equals(mAppId)) {
-            //Create a QooAppOpenSDK, you can use this way.
-            mQooAppOpenSDK = QooAppOpenSDK.initialize(MainActivity.this, mAppId);
+        showProgress();
+        if (mAppId != null) {
+            //Create a QooAppOpenSDK, you can use this way, not recommend.
+            mQooAppOpenSDK = QooAppOpenSDK.initialize(MainActivity.this, mAppId, mInitCallback, true, false);
         } else {
             //Create a QooAppOpenSDK, you can use this way too.
             //Create a QooAppOpenSDK, you must provide params in AndroidManifest.xml
-            mQooAppOpenSDK = QooAppOpenSDK.initialize(MainActivity.this);
+            mQooAppOpenSDK = QooAppOpenSDK.initialize(MainActivity.this, mInitCallback);
         }
     }
 
@@ -110,8 +241,6 @@ public class MainActivity extends AppCompatActivity {
         mDataList = CacheUtil.getChannels(MainActivity.this);
         mBtnSelect.setVisibility(mDataList.size() > 0 ? View.VISIBLE : View.GONE);
         mAppId = SharedPrefsUtils.getStringPreference(MainActivity.this, KEY_APP_ID);
-//        mAppId = "BETA75d5fae60b5e11ea8d1b061ac4f87ae8";
-//        mAppId = "BETAfad266b20b5411ea8b28061ac4f87ae8";
         mEdtAppId.setText(mAppId);
         mBtnSelect.setText(mAppId + "   ▼");
     }
@@ -166,122 +295,40 @@ public class MainActivity extends AppCompatActivity {
         }, purchase_id, token);
     }
 
+    /**
+     * show toast info
+     * @param context
+     * @param text
+     */
     private void showToast(Context context, CharSequence text) {
-        if (context == null || text == null) return;
         Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
         toast.show();
     }
 
-    public void login(View view) {
-        mQooAppOpenSDK.login(new QooAppCallback() {
-            @Override
-            public void onSuccess(String response) {
-                Log.d("mQooAppOpenSDK", "response = "+response);
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    mUserId = jsonObject.getJSONObject("data").getString("user_id");
-                    SharedPrefsUtils.setStringPreference(MainActivity.this, KEY_USERID, mUserId);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                displayResult(response);
-            }
-
-            @Override
-            public void onError(String error) {
-                Log.e("mQooAppOpenSDK", "error = "+error);
-                displayResult(error);
-            }
-        });
-    }
-
     /**
-     * checkLicense
+     * @param type which type info
+     * @param result
      */
-    public void checkLicense(View view) {
-        mQooAppOpenSDK.checkLicense(new QooAppCallback() {
-
-            @Override
-            public void onSuccess(String response) {
-                // verification succeed
-                Log.d("mQooAppOpenSDK", "response = "+response);
-                displayResult(response);
-            }
-
-            @Override
-            public void onError(String error) {
-                Log.e("mQooAppOpenSDK", "error = "+error);
-                // For unknown reason, verification cannot be done.
-                // Please disallow access for proper protection.
-                displayResult(error);
-            }
-        });
-    }
-
-    /**
-     * 獲取商品列表
-     */
-    public void queryProducts(View view) {
-        showProgress();
-        mQooAppOpenSDK.queryProducts(new QooAppCallback() {
-            @Override
-            public void onSuccess(String response) {
-                Log.d("mQooAppOpenSDK", "response = "+response);
-                dismissProgress();
-                displayResult(response);
-            }
-
-            @Override
-            public void onError(String error) {
-                Log.e("mQooAppOpenSDK", "error = "+error);
-                dismissProgress();
-                displayResult(error);
-            }
-        });
-    }
-
-    /**
-     * restorePurchases
-     */
-    public void getPurchasedRecords(View view) {
-        showProgress();
-        mQooAppOpenSDK.restorePurchases(new QooAppCallback() {
-            @Override
-            public void onSuccess(String response) {
-                Log.d("mQooAppOpenSDK", "response = "+response);
-                dismissProgress();
-                displayResult(true, response);
-            }
-
-            @Override
-            public void onError(String error) {
-                Log.e("mQooAppOpenSDK", "error = "+error);
-                dismissProgress();
-                displayResult(error);
-            }
-        });
-    }
-
-    private void displayResult(final String result) {
-        displayResult(false, result);
-    }
-
-    private void displayResult(boolean isGetRecords, final String result) {
+    private void displayResult(int type, final String result) {
+        Log.d(TAG,"type = "+type+", result = "+result);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(result);
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (mLayoutProducts.getVisibility() == View.VISIBLE) {
-                    if (isGetRecords) {
-                        parseRecords(result);
-                    } else {
+                switch (type) {
+                    case TYPE_LOGIN:
+                        showVerifyView();
+                        break;
+                    case TYPE_VERIFY:
+                        showProductsView();
+                        break;
+                    case TYPE_QUERY_PRODUCT:
                         parseProducts(result);
-                    }
-                } else if (mLayoutLogin.getVisibility() == View.VISIBLE) {
-                    showProducts();
-                } else if (mLayoutCheckLicense.getVisibility() == View.VISIBLE) {
-                    showLogin();
+                        break;
+                    case TYPE_QUERY_RECORD:
+                        parseRecords(result);
+                        break;
                 }
             }
         });
@@ -290,50 +337,12 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    private void showCheckLicense() {
-        mLayoutCheckLicense.setVisibility(View.VISIBLE);
-        mLayoutLogin.setVisibility(View.GONE);
-        mLayoutProducts.setVisibility(View.GONE);
-        mLayoutInit.setVisibility(View.GONE);
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("CheckLicense");
-        TextView tvSkip = findViewById(R.id.btn_skip);
-        tvSkip.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
-        tvSkip.getPaint().setAntiAlias(true);
-        tvSkip.setOnClickListener(v -> showLogin());
-    }
-
-    private void showLogin() {
-        mLayoutCheckLicense.setVisibility(View.GONE);
-        mLayoutLogin.setVisibility(View.VISIBLE);
-        mLayoutProducts.setVisibility(View.GONE);
-        mLayoutInit.setVisibility(View.GONE);
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Login");
-        final EditText editUid = findViewById(R.id.edt_uid);
-        findViewById(R.id.btn_bind).setOnClickListener(v -> {
-            mUserId = editUid.getText().toString();
-            if (!TextUtils.isEmpty(mUserId)) {
-                SharedPrefsUtils.setStringPreference(MainActivity.this, KEY_USERID, mUserId);
-                mQooAppOpenSDK.bindUserId(mUserId);
-                showProducts();
-            }
-        });
-    }
-
+    /**
+     * parse products list info
+     * @param result
+     */
     private void parseProducts(String result) {
+        Log.d(TAG, "result："+result);
         try {
             JSONObject jsonObject = new JSONObject(result);
             JSONArray dataArray = jsonObject.getJSONArray("data");
@@ -359,41 +368,7 @@ public class MainActivity extends AppCompatActivity {
                 mListView.setAdapter(mAdapter);
                 mListView.setOnItemClickListener((parent, view, position, id) -> {
                     final Product product = mProductsList.get(position);
-                    mQooAppOpenSDK.purchase(new PaymentCallback() {
-
-                        @Override
-                        public void onComplete(String response) {
-                            Log.d("mQooAppOpenSDK", "response = "+response);
-                            //Handle success case
-                            try {
-                                JSONObject obj = new JSONObject(response);
-                                JSONObject jsonObject = obj.getJSONObject("data");
-                                //We have product. Consuming it.
-                                String purchase_id = jsonObject.optString("purchase_id");
-                                final String token = jsonObject.optString("token");
-                                consumePurchase(token, purchase_id);
-                                String product_id = jsonObject.optString("product_id");
-                                mQooAppOpenSDK.closePaymentUI();
-                                showToast(MainActivity.this, "Purchasing successful，Consuming...[purchase_id:" + purchase_id + ",product_id:" + product_id + ",token:" + token);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onError(String error) {
-                            Log.e("mQooAppOpenSDK", "error = "+error);
-                            //Handle error case
-                            showToast(MainActivity.this, "Error:" + error);
-                        }
-
-                        @Override
-                        public void onCancel() {
-                            Log.e("mQooAppOpenSDK", "onCancel ");
-                            //Handle the dialog hided case
-                            showToast(MainActivity.this, "Be canceled");
-                        }
-                    }, MainActivity.this, product.getProductId());
+                    mQooAppOpenSDK.purchase(mPaymentCallback, MainActivity.this, product.getProductId(), "cporderid----", "dev-0110");
                 });
                 mBtnProducts.setVisibility(View.GONE);
                 mBtnPurchased.setVisibility(View.GONE);
@@ -404,6 +379,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * parse records list
+     * @param result
+     */
     private void parseRecords(String result) {
         try {
 
@@ -440,26 +419,37 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showProducts() {
+    private void showInitView() {
+        mLayoutInit.setVisibility(View.VISIBLE);
+        mLayoutCheckLicense.setVisibility(View.GONE);
+        mLayoutProducts.setVisibility(View.GONE);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        setTitle("QooAppOpenSDK: Initialize");
+    }
+
+    private void showVerifyView() {
+        mLayoutCheckLicense.setVisibility(View.VISIBLE);
+        mLayoutProducts.setVisibility(View.GONE);
+        mLayoutInit.setVisibility(View.GONE);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle("Verify");
+        TextView tvSkip = findViewById(R.id.btn_skip);
+        tvSkip.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+        tvSkip.getPaint().setAntiAlias(true);
+        tvSkip.setOnClickListener(v -> showProductsView());
+    }
+
+    private void showProductsView() {
         mLayoutInit.setVisibility(View.GONE);
         mLayoutCheckLicense.setVisibility(View.GONE);
-        mLayoutLogin.setVisibility(View.GONE);
         mLayoutProducts.setVisibility(View.VISIBLE);
         mBtnProducts.setVisibility(View.VISIBLE);
         mBtnPurchased.setVisibility(View.VISIBLE);
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Products");
-    }
-
-    private void showInit() {
-        mLayoutInit.setVisibility(View.VISIBLE);
-        mLayoutCheckLicense.setVisibility(View.GONE);
-        mLayoutLogin.setVisibility(View.GONE);
-        mLayoutProducts.setVisibility(View.GONE);
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        setTitle("QooAppOpenSDK: Initialize  v"+BuildConfig.VERSION_NAME);
     }
 
     private void showProgress() {
@@ -471,7 +461,7 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.show();
     }
 
-    private void dismissProgress() {
+    private void hideProgress() {
         if (progressDialog != null) {
             progressDialog.dismiss();
         }
@@ -486,14 +476,12 @@ public class MainActivity extends AppCompatActivity {
         if (mLayoutProducts.getVisibility() == View.VISIBLE) {
             if (mListView.getVisibility() == View.VISIBLE) {
                 mListView.setVisibility(View.GONE);
-                showProducts();
+                showProductsView();
             } else {
-                showLogin();
+                showVerifyView();
             }
-        } else if (mLayoutLogin.getVisibility() == View.VISIBLE) {
-            showCheckLicense();
         } else if (mLayoutCheckLicense.getVisibility() == View.VISIBLE) {
-            showInit();
+            showInitView();
         } else {
             finish();
         }

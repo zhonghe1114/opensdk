@@ -19,6 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="com.qooapp.APP_ID"
+            android:value="your app id"
+            />
     </application>
 
 </manifest>
