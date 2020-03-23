@@ -13,6 +13,13 @@
         android:orientation="vertical"
         android:gravity="center">
 
+        <CheckBox
+            android:id="@+id/cb_use_cache"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="whether use cache?"
+            android:checked="true" />
+
         <Button
             android:id="@+id/btn_select"
             android:layout_width="match_parent"

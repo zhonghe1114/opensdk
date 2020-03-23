@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView mListView;
     private List<Product> mProductsList = new ArrayList<>();
     private ProductAdapter mAdapter;
+    private CheckBox mCbUseCache;
     private EditText mEdtAppId;
     private Button mBtnSelect;
     private Button mBtnProducts;
@@ -148,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-
+        mCbUseCache = this.findViewById(R.id.cb_use_cache);
         mEdtAppId = this.findViewById(R.id.edt_appId);
         Button btnInit = this.findViewById(R.id.btn_init);
         mBtnSelect = this.findViewById(R.id.btn_select);
@@ -229,11 +231,11 @@ public class MainActivity extends AppCompatActivity {
         showProgress();
         if (mAppId != null) {
             //Create a QooAppOpenSDK, you can use this way, not recommend.
-            mQooAppOpenSDK = QooAppOpenSDK.initialize(MainActivity.this, mAppId, mInitCallback, true, false);
+            mQooAppOpenSDK = QooAppOpenSDK.initialize(mInitCallback, MainActivity.this, mAppId, mCbUseCache.isChecked(), false);
         } else {
             //Create a QooAppOpenSDK, you can use this way too.
             //Create a QooAppOpenSDK, you must provide params in AndroidManifest.xml
-            mQooAppOpenSDK = QooAppOpenSDK.initialize(MainActivity.this, mInitCallback);
+            mQooAppOpenSDK = QooAppOpenSDK.initialize(mInitCallback, MainActivity.this);
         }
     }
 
