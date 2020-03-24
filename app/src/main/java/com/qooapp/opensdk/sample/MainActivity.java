@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String KEY_USERID = "user_id";
     private List<String> mDataList;
     //The QooAppOpenSDK created a singleton
-    private QooAppOpenSDK mQooAppOpenSDK;
     private View mLayoutInit;
     private View mLayoutCheckLicense;
     private View mLayoutProducts;
@@ -63,26 +62,14 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private int mSelected;
 
-    /**
-     * 错误
-     */
     private final int TYPE_ERROR = 0;
 
-    /**
-     * 登录
-     */
     private final int TYPE_LOGIN = 1;
-    /**
-     * 校验
-     */
+
     private final int TYPE_VERIFY = 2;
-    /**
-     * 查询产品
-     */
+
     private final int TYPE_QUERY_PRODUCT = 3;
-    /**
-     * 恢复购买
-     */
+
     private final int TYPE_QUERY_RECORD = 4;
 
     private QooAppCallback mInitCallback = new QooAppCallback() {
@@ -120,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 final String token = jsonObject.optString("token");
                 consumePurchase(token, purchase_id);
                 String product_id = jsonObject.optString("product_id");
-                mQooAppOpenSDK.closePaymentUI();
+                QooAppOpenSDK.getInstance().closePaymentUI();
                 showToast(MainActivity.this, "Purchasing successful，Consuming...[purchase_id:" + purchase_id + ",product_id:" + product_id + ",token:" + token);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -172,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
         mBtnSelect.setOnClickListener(v -> showSelectChannel());
 
         findViewById(R.id.btn_verify).setOnClickListener(v -> {
-            mQooAppOpenSDK.checkLicense(new QooAppCallback() {
+            QooAppOpenSDK.getInstance().checkLicense(new QooAppCallback() {
 
                 @Override
                 public void onSuccess(String info) {
@@ -191,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.btn_products).setOnClickListener(v -> {
             showProgress();
-            mQooAppOpenSDK.queryProducts(new QooAppCallback() {
+            QooAppOpenSDK.getInstance().queryProducts(new QooAppCallback() {
                 @Override
                 public void onSuccess(String result) {
                     hideProgress();
@@ -208,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.btn_purchased).setOnClickListener(v -> {
             showProgress();
-            mQooAppOpenSDK.restorePurchases(new QooAppCallback() {
+            QooAppOpenSDK.getInstance().restorePurchases(new QooAppCallback() {
                 @Override
                 public void onSuccess(String result) {
                     hideProgress();
@@ -231,11 +218,11 @@ public class MainActivity extends AppCompatActivity {
         showProgress();
         if (mAppId != null) {
             //Create a QooAppOpenSDK, you can use this way, not recommend.
-            mQooAppOpenSDK = QooAppOpenSDK.initialize(mInitCallback, MainActivity.this, mAppId, mCbUseCache.isChecked(), false);
+            QooAppOpenSDK.initialize(mInitCallback, MainActivity.this, mAppId, mCbUseCache.isChecked(), false);
         } else {
             //Create a QooAppOpenSDK, you can use this way too.
             //Create a QooAppOpenSDK, you must provide params in AndroidManifest.xml
-            mQooAppOpenSDK = QooAppOpenSDK.initialize(mInitCallback, MainActivity.this);
+            QooAppOpenSDK.initialize(mInitCallback, MainActivity.this, mCbUseCache.isChecked(), false);
         }
     }
 
@@ -281,12 +268,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void consumePurchase(String token, String purchase_id) {
-        mQooAppOpenSDK.consume(new QooAppCallback() {
+        QooAppOpenSDK.getInstance().consume(new QooAppCallback() {
             @Override
             public void onSuccess(String response) {
                 showToast(MainActivity.this, "Consumption successful!");
                 Log.d("mQooAppOpenSDK", "response = "+response);
-                mQooAppOpenSDK.closePaymentUI();
+                QooAppOpenSDK.getInstance().closePaymentUI();
             }
 
             @Override
@@ -370,7 +357,7 @@ public class MainActivity extends AppCompatActivity {
                 mListView.setAdapter(mAdapter);
                 mListView.setOnItemClickListener((parent, view, position, id) -> {
                     final Product product = mProductsList.get(position);
-                    mQooAppOpenSDK.purchase(mPaymentCallback, MainActivity.this, product.getProductId(), "cporderid----", "dev-0110");
+                    QooAppOpenSDK.getInstance().purchase(mPaymentCallback, MainActivity.this, product.getProductId(), "cporderid----", "dev-0110");
                 });
                 mBtnProducts.setVisibility(View.GONE);
                 mBtnPurchased.setVisibility(View.GONE);

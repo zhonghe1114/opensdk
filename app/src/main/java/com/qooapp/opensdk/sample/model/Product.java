@@ -2,7 +2,6 @@ package com.qooapp.opensdk.sample.model;
 
 /**
  *
- * @author Vito (QooAppSDK)
  * @email devel@qoo-app.com
  */
 public class Product {
