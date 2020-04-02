@@ -19,10 +19,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.qooapp.APP_ID"
-            android:value="your app id"
-            />
+            android:value="SAND2ce4a6c0587f11eaad0206c11e2c3ade"/>
+        <meta-data
+            android:name="com.qooapp.PUBLIC_KEY"
+            android:value="-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnMakssNU0L3nG4AWIaEG
+Vk8PNKHlD/P9nSTSip44LH3oJmXtRtxI2QqLxsYy4Ghj52pp/eNB7pGdsMn3Ph6S
+sRHNZqAjPQvMQVkwwlB/U04rWq4v/60Ul41MVDVy2xs8B9KwROFE2UTNPcagMTYs
+Q54rlimbcQD1uWaAD0ZbqZBszfZ+kTSMe+MDI8vPkrjGAkVgQ/RaD3ciOSM12L1h
+kBoxlUQxCssSr4m3WzwgJQu7jYAI6cC2M8SGYpopA7lGqHKZfgyYyY1eqQXl3XSn
+mBs0VHBejMY0snWqN1KrN7uIfGxKYFf/h14WAIWMfTxOTf7NU42OYZRIj8RLeERl
+GQIDAQAB
+-----END PUBLIC KEY-----"/>
     </application>
 
 </manifest>

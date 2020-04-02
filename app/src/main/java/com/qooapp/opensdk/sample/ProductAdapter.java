@@ -14,7 +14,6 @@ import java.util.List;
 
 /**
  * An adapter to list
- * @author Vito (QooAppSDK)
  * @email devel@qoo-app.com
  */
 public class ProductAdapter extends BaseAdapter{

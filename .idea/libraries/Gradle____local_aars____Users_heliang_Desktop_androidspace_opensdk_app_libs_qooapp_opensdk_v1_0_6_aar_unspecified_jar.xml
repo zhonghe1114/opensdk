@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: __local_aars__:/Users/heliang/Desktop/androidspace/opensdk/app/libs/qooapp-opensdk-v1.0.6.aar:unspecified@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/37273671969a27165fc497b0f2329fa1/qooapp-opensdk-v1.0.6/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/37273671969a27165fc497b0f2329fa1/qooapp-opensdk-v1.0.6/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

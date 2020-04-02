@@ -11,8 +11,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,8 +19,6 @@ import com.qooapp.opensdk.QooAppOpenSDK;
 import com.qooapp.opensdk.common.PaymentCallback;
 import com.qooapp.opensdk.common.QooAppCallback;
 import com.qooapp.opensdk.sample.model.Product;
-import com.qooapp.opensdk.sample.util.CacheUtil;
-import com.qooapp.opensdk.sample.util.SharedPrefsUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,26 +37,16 @@ public class MainActivity extends AppCompatActivity {
 
     private final String TAG = "MainActivity";
 
-    //Your app id
-    private String mAppId = "Your app id";
-    public final static String KEY_APP_ID = "app_id";
-    public static final String KEY_USERID = "user_id";
-    private List<String> mDataList;
     //The QooAppOpenSDK created a singleton
     private View mLayoutInit;
     private View mLayoutCheckLicense;
     private View mLayoutProducts;
-    private String mUserId;
     private ListView mListView;
     private List<Product> mProductsList = new ArrayList<>();
     private ProductAdapter mAdapter;
-    private CheckBox mCbUseCache;
-    private EditText mEdtAppId;
-    private Button mBtnSelect;
     private Button mBtnProducts;
     private Button mBtnPurchased;
     private ProgressDialog progressDialog;
-    private int mSelected;
 
     private final int TYPE_ERROR = 0;
 
@@ -75,14 +61,6 @@ public class MainActivity extends AppCompatActivity {
     private QooAppCallback mInitCallback = new QooAppCallback() {
         @Override
         public void onSuccess(String response) {
-
-            try {
-                JSONObject jsonObject = new JSONObject(response);
-                mUserId = jsonObject.getJSONObject("data").getString("user_id");
-                SharedPrefsUtils.setStringPreference(MainActivity.this, KEY_USERID, mUserId);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
             displayResult(TYPE_LOGIN, response);
             hideProgress();
         }
@@ -133,14 +111,10 @@ public class MainActivity extends AppCompatActivity {
         setTitle("QooAppOpenSDK: Initialize  v"+BuildConfig.VERSION_NAME);
 
         initView();
-        initLocalData();
     }
 
     private void initView() {
-        mCbUseCache = this.findViewById(R.id.cb_use_cache);
-        mEdtAppId = this.findViewById(R.id.edt_appId);
         Button btnInit = this.findViewById(R.id.btn_init);
-        mBtnSelect = this.findViewById(R.id.btn_select);
         mBtnProducts = this.findViewById(R.id.btn_products);
         mLayoutInit = this.findViewById(R.id.layout_init);
         mLayoutCheckLicense = this.findViewById(R.id.layout_verify);
@@ -148,15 +122,13 @@ public class MainActivity extends AppCompatActivity {
         mBtnPurchased = this.findViewById(R.id.btn_purchased);
         mListView = this.findViewById(R.id.list_view);
         btnInit.setOnClickListener(v -> {
-            mAppId = mEdtAppId.getText().toString();
-            SharedPrefsUtils.setStringPreference(MainActivity.this, KEY_APP_ID, mAppId);
-            CacheUtil.saveChannel(MainActivity.this, mAppId);
-            initQooAppOpenSDK();
+
+            showProgress();
+            // you can use this way to init QooAppOpenSDK.
+            // you must provide params in AndroidManifest.xml
+            QooAppOpenSDK.initialize(mInitCallback, MainActivity.this, false);
 
         });
-
-
-        mBtnSelect.setOnClickListener(v -> showSelectChannel());
 
         findViewById(R.id.btn_verify).setOnClickListener(v -> {
             QooAppOpenSDK.getInstance().checkLicense(new QooAppCallback() {
@@ -211,29 +183,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * init QooAppOpenSDK
-     */
-    protected void initQooAppOpenSDK() {
-        showProgress();
-        if (mAppId != null) {
-            //Create a QooAppOpenSDK, you can use this way, not recommend.
-            QooAppOpenSDK.initialize(mInitCallback, MainActivity.this, mAppId, mCbUseCache.isChecked(), false);
-        } else {
-            //Create a QooAppOpenSDK, you can use this way too.
-            //Create a QooAppOpenSDK, you must provide params in AndroidManifest.xml
-            QooAppOpenSDK.initialize(mInitCallback, MainActivity.this, mCbUseCache.isChecked(), false);
-        }
-    }
-
-    protected void initLocalData() {
-        mDataList = CacheUtil.getChannels(MainActivity.this);
-        mBtnSelect.setVisibility(mDataList.size() > 0 ? View.VISIBLE : View.GONE);
-        mAppId = SharedPrefsUtils.getStringPreference(MainActivity.this, KEY_APP_ID);
-        mEdtAppId.setText(mAppId);
-        mBtnSelect.setText(mAppId + "   ▼");
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -243,28 +192,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void showSelectChannel() {
-        final String[] channels = new String[mDataList.size()];
-        for (int i = 0; i < mDataList.size(); i++) {
-            String info = mDataList.get(i);
-            channels[i] = info;
-        }
-        new AlertDialog.Builder(this)
-                .setTitle("Options")
-                .setIcon(android.R.drawable.ic_dialog_info)
-                .setSingleChoiceItems(channels, mSelected,
-                        (dialog, which) -> {
-                            mSelected = which;
-                            dialog.dismiss();
-                            String channel = mDataList.get(which);
-                            mEdtAppId.setText(channel);
-                            mBtnSelect.setText(channels[which] + "▼");
-                        }
-                )
-                .setNegativeButton("Cancel", null)
-                .show();
     }
 
     public void consumePurchase(String token, String purchase_id) {

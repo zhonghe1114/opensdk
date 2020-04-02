@@ -13,36 +13,12 @@
         android:orientation="vertical"
         android:gravity="center">
 
-        <CheckBox
-            android:id="@+id/cb_use_cache"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="whether use cache?"
-            android:checked="true" />
-
-        <Button
-            android:id="@+id/btn_select"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/colorPrimary"
-            android:gravity="center"
-            android:text="{app_id}▼"
-            android:textColor="@android:color/white"
-            android:textAllCaps="false"/>
-
-        <EditText
-            android:id="@+id/edt_appId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="App ID" />
-
         <Button
             android:id="@+id/btn_init"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
+            android:layout_marginTop="10dp"
             android:text="QooAppOpenSDK.initialize()"
             android:textColor="@android:color/white"
             android:textAllCaps="false"/>
