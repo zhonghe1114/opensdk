@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.qooapp.opensdk.sample">
-
-    <!--paypal Required -->
-    <!-- VERY IMPORTANT! Don't forget this permission, or in-app billing won't work. -->
+<!--
+    <queries>
+        <package android:name="com.qooapp.qoohelper" />
+    </queries>-->
 
     <application
         android:allowBackup="true"
@@ -22,10 +23,10 @@
 
         <meta-data
             android:name="com.qooapp.APP_ID"
-            android:value="your appId"/>
+            android:value="Your app_id"/>
         <meta-data
             android:name="com.qooapp.PUBLIC_KEY"
-            android:value="your public key"/>
+            android:value="Your Public Key"/>
     </application>
 
 </manifest>

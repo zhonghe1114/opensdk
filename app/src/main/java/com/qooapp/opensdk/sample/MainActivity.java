@@ -126,8 +126,40 @@ public class MainActivity extends AppCompatActivity {
             showProgress();
             // you can use this way to init QooAppOpenSDK.
             // you must provide params in AndroidManifest.xml
-            QooAppOpenSDK.initialize(mInitCallback, MainActivity.this, false);
+            QooAppOpenSDK.initialize(mInitCallback, this);
 
+        });
+
+        findViewById(R.id.btnClear).setOnClickListener(v -> {
+            QooAppOpenSDK.getInstance().loginOut(new QooAppCallback() {
+                @Override
+                public void onSuccess(String response) {
+                    showToast(MainActivity.this, response);
+                }
+
+                @Override
+                public void onError(String error) {
+                    showToast(MainActivity.this, error);
+
+                }
+            }, MainActivity.this);
+        });
+
+        findViewById(R.id.re_get).setOnClickListener(v -> {
+            showProgress();
+            QooAppOpenSDK.getInstance().queryProducts(new QooAppCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    hideProgress();
+                    displayResult(TYPE_QUERY_PRODUCT, result);
+                }
+
+                @Override
+                public void onError(String error) {
+                    displayResult(TYPE_ERROR, error);
+                    hideProgress();
+                }
+            });
         });
 
         findViewById(R.id.btn_verify).setOnClickListener(v -> {
@@ -378,7 +410,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void hideProgress() {
-        if (progressDialog != null) {
+        if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
     }
