@@ -13,57 +13,29 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ae6c65f0-6c01-42d5-b4ea-4574b479a6dc" name="Default Changelist" comment="發佈1.1.0版本（#0）">
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_qooapp_opensdk_v1_1_1_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/app/opensdk-sample.app.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/libs/qooapp-opensdk-v1.1.1.aar" afterDir="false" />
+    <list default="true" id="ae6c65f0-6c01-42d5-b4ea-4574b479a6dc" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/libs/qooapp-opensdk-v1.1.2.aar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars____Users_heliang_Desktop_androidspace_opensdk_app_libs_qooapp_opensdk_v1_0_6_aar_unspecified_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars____Users_heliang_Desktop_androidspace_opensdk_app_libs_qooapp_opensdk_v1_1_0_aar_unspecified_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__android_arch_core_common_1_0_0_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__android_arch_core_common_1_0_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__android_arch_lifecycle_common_1_0_0_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__android_arch_lifecycle_common_1_0_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__android_arch_lifecycle_runtime_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__android_arch_lifecycle_runtime_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_animated_vector_drawable_26_1_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_animated_vector_drawable_26_1_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_appcompat_v7_26_1_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_appcompat_v7_26_1_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_annotations_26_1_0_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_annotations_26_1_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_compat_26_1_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_compat_26_1_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_core_ui_26_1_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_core_ui_26_1_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_core_utils_26_1_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_core_utils_26_1_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_fragment_26_1_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_fragment_26_1_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_media_compat_26_1_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_media_compat_26_1_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_v4_26_1_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_v4_26_1_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_vector_drawable_26_1_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_vector_drawable_26_1_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_qooapp_opensdk_v1_1_1_aar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/opensdk-sample.app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/opensdk-sample.app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/app.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/libs/qooapp-opensdk-v1.1.0.aar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/libs/qooapp-opensdk-v1.1.1.aar" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/qooapp/opensdk/sample/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/qooapp/opensdk/sample/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/opensdk-sample.iml" beforeDir="false" afterPath="$PROJECT_DIR$/opensdk-sample.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[1eabb46b0304]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[84eb253f]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -75,15 +47,6 @@
         <projects_view />
       </state>
     </system>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>mAppId</find>
-      <find>QooAppOpenSDK</find>
-      <find>TAG</find>
-      <find>onSuccess</find>
-      <find>public key =</find>
-    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -211,7 +174,14 @@
       <option name="project" value="LOCAL" />
       <updated>1585826078765</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="發佈1.1.1版本（#0）">
+      <created>1605066610241</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1605066610241</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TodoView">
@@ -227,33 +197,30 @@
     <MESSAGE value="新增初始化方法加了兩個boolean參數" />
     <MESSAGE value="去掉cache参数" />
     <MESSAGE value="發佈1.1.0版本（#0）" />
-    <option name="LAST_COMMIT_MESSAGE" value="發佈1.1.0版本（#0）" />
+    <MESSAGE value="發佈1.1.1版本（#0）" />
+    <option name="LAST_COMMIT_MESSAGE" value="發佈1.1.1版本（#0）" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1878" height="455" key="GridCell.Tab.0.bottom" timestamp="1605011937546">
+    <state x="1391" y="-977" key="#app" timestamp="1617788876663">
       <screen x="973" y="-1057" width="1920" height="1057" />
     </state>
-    <state width="1878" height="455" key="GridCell.Tab.0.bottom/0.23.1440.803/-947.-1057.1920.1057/973.-1057.1920.1057@973.-1057.1920.1057" timestamp="1605010748681" />
-    <state width="1878" height="455" key="GridCell.Tab.0.bottom/0.23.1440.804/-947.-1057.1920.1057/973.-1057.1920.1057@973.-1057.1920.1057" timestamp="1605011937546" />
-    <state width="1878" height="455" key="GridCell.Tab.0.center" timestamp="1605011937545">
-      <screen x="973" y="-1057" width="1920" height="1057" />
+    <state x="1391" y="-977" key="#app/0.23.1440.810/-947.-1057.1920.1057/973.-1057.1920.1057@973.-1057.1920.1057" timestamp="1617788876663" />
+    <state width="1398" height="90" key="GridCell.Tab.0.bottom" timestamp="1615972435670">
+      <screen x="-947" y="-1057" width="1920" height="1057" />
     </state>
-    <state width="1878" height="455" key="GridCell.Tab.0.center/0.23.1440.803/-947.-1057.1920.1057/973.-1057.1920.1057@973.-1057.1920.1057" timestamp="1605010748680" />
-    <state width="1878" height="455" key="GridCell.Tab.0.center/0.23.1440.804/-947.-1057.1920.1057/973.-1057.1920.1057@973.-1057.1920.1057" timestamp="1605011937545" />
-    <state width="1878" height="455" key="GridCell.Tab.0.left" timestamp="1605011937545">
-      <screen x="973" y="-1057" width="1920" height="1057" />
+    <state width="1398" height="90" key="GridCell.Tab.0.bottom/0.23.1440.799/-947.-1057.1920.1057/973.-1057.1920.1057@-947.-1057.1920.1057" timestamp="1615972435670" />
+    <state width="1398" height="90" key="GridCell.Tab.0.center" timestamp="1615972435670">
+      <screen x="-947" y="-1057" width="1920" height="1057" />
     </state>
-    <state width="1878" height="455" key="GridCell.Tab.0.left/0.23.1440.803/-947.-1057.1920.1057/973.-1057.1920.1057@973.-1057.1920.1057" timestamp="1605010748679" />
-    <state width="1878" height="455" key="GridCell.Tab.0.left/0.23.1440.804/-947.-1057.1920.1057/973.-1057.1920.1057@973.-1057.1920.1057" timestamp="1605011937545" />
-    <state width="1878" height="455" key="GridCell.Tab.0.right" timestamp="1605011937545">
-      <screen x="973" y="-1057" width="1920" height="1057" />
+    <state width="1398" height="90" key="GridCell.Tab.0.center/0.23.1440.799/-947.-1057.1920.1057/973.-1057.1920.1057@-947.-1057.1920.1057" timestamp="1615972435670" />
+    <state width="1398" height="90" key="GridCell.Tab.0.left" timestamp="1615972435669">
+      <screen x="-947" y="-1057" width="1920" height="1057" />
     </state>
-    <state width="1878" height="455" key="GridCell.Tab.0.right/0.23.1440.803/-947.-1057.1920.1057/973.-1057.1920.1057@973.-1057.1920.1057" timestamp="1605010748680" />
-    <state width="1878" height="455" key="GridCell.Tab.0.right/0.23.1440.804/-947.-1057.1920.1057/973.-1057.1920.1057@973.-1057.1920.1057" timestamp="1605011937545" />
-    <state x="1434" y="-890" key="SettingsEditor" timestamp="1603189306397">
-      <screen x="973" y="-1057" width="1920" height="1057" />
+    <state width="1398" height="90" key="GridCell.Tab.0.left/0.23.1440.799/-947.-1057.1920.1057/973.-1057.1920.1057@-947.-1057.1920.1057" timestamp="1615972435669" />
+    <state width="1398" height="90" key="GridCell.Tab.0.right" timestamp="1615972435670">
+      <screen x="-947" y="-1057" width="1920" height="1057" />
     </state>
-    <state x="1434" y="-890" key="SettingsEditor/0.23.1440.877/973.-1057.1920.1057/-947.-1057.1920.1057@973.-1057.1920.1057" timestamp="1603189306397" />
+    <state width="1398" height="90" key="GridCell.Tab.0.right/0.23.1440.799/-947.-1057.1920.1057/973.-1057.1920.1057@-947.-1057.1920.1057" timestamp="1615972435670" />
   </component>
   <component name="masterDetails">
     <states>

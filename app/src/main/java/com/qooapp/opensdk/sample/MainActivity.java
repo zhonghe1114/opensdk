@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.btnClear).setOnClickListener(v -> {
-            QooAppOpenSDK.getInstance().loginOut(new QooAppCallback() {
+            QooAppOpenSDK.getInstance().logout(new QooAppCallback() {
                 @Override
                 public void onSuccess(String response) {
                     showToast(MainActivity.this, response);
