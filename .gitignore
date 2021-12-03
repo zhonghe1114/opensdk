@@ -1,0 +1,89 @@
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+.idea
+*.iml
+
+
+proguard_logs
+proguard_logs/*
+*.iml
+*.log
+*/*.iml
+
+# gradle files
+*.gradle/*
+
+# built application files
+*.apk
+*.ap_
+build
+*build/*
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+bin/
+gen/
+
+# IntelliJ IDEA
+.idea
+.idea/*
+/*/local.properties
+/*/out
+/*/*/build
+/*/*/production
+*.iws
+*~
+*.swp
+out
+out/*
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+*.pydevproject
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# PDT-specific
+.buildpath
+
+captures
+
+qoohelper-release-key.keystore
+
+test/qoohelper/report/**
+.vscode
+
+#freeline
+freeline*
+
+*.patch
+.DS_Store
+unused-strings.txt
+.meghanada
+.#.*

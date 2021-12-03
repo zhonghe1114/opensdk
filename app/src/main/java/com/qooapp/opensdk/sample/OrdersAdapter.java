@@ -7,17 +7,19 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.qooapp.opensdk.sample.model.Product;
+import com.qooapp.opensdk.sample.model.OrderBean;
 
 import java.util.List;
 
 /**
+ * An adapter to list
+ * @email devel@qoo-app.com
  */
-public class ProductAdapter extends BaseAdapter{
+public class OrdersAdapter extends BaseAdapter{
 
     private Context mContext;
-    private List<Product> mDataList;
-    public ProductAdapter(Context context, List<Product> dataList){
+    private List<OrderBean> mDataList;
+    public OrdersAdapter(Context context, List<OrderBean> dataList){
         this.mContext = context;
         this.mDataList = dataList;
     }
@@ -49,10 +51,8 @@ public class ProductAdapter extends BaseAdapter{
         }else{
             holder = (ViewHolder) view.getTag();
         }
-        final Product info = mDataList.get(position);
-
-        holder.tvName.setText(info.getName());
-        holder.tvPrice.setText(info.getPrice().get(0).amount + " " + info.getPrice().get(0).currency);
+        final OrderBean info = mDataList.get(position);
+        holder.tvName.setText(info.getProduct_id() + "(" + info.getPurchase_id() + ")");
         holder.tvIndex.setText((position+1)+"");
         return view;
     }

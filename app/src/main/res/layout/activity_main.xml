@@ -24,7 +24,7 @@
             android:textAllCaps="false"/>
 
         <Button
-            android:id="@+id/btnClear"
+            android:id="@+id/btn_logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -33,27 +33,11 @@
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:text="login out" />
-
-        <Button
-            android:id="@+id/re_get"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@color/colorPrimary"
-            android:textColor="@android:color/white"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:text="queryProducts" />
     </LinearLayout>
 
     <include
-        android:id="@+id/layout_verify"
-        layout="@layout/layout_verify"
+        android:id="@+id/layout_function"
+        layout="@layout/layout_functions"
         android:background="@android:color/white"
-        android:visibility="gone" />
-
-    <include
-        android:id="@+id/layout_products"
-        layout="@layout/layout_products"
         android:visibility="gone" />
 </FrameLayout>

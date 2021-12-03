@@ -3,8 +3,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center">
+    <TextView
+        android:id="@+id/btn_skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="chose what you want"
+        android:autoLink="all"
+        android:gravity="center"
+        android:textColor="@android:color/holo_blue_dark" />
+    <Button
+        android:id="@+id/btn_check_reward"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@color/colorPrimary"
+        android:text="QooAppOpenSDK.checkReward()"
+        android:textColor="@android:color/white"
+        android:textAllCaps="false"/>
+    <Button
+        android:id="@+id/btn_verify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@color/colorPrimary"
+        android:text="QooAppOpenSDK.checkLicense()"
+        android:textColor="@android:color/white"
+        android:textAllCaps="false"/>
 
     <Button
         android:id="@+id/btn_products"
@@ -14,7 +40,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:background="@color/colorPrimary"
-        android:text="mQooAppOpenSDK.queryProducts()"
+        android:text="QooAppOpenSDK.queryProducts()"
         android:textAllCaps="false"
         android:textColor="@android:color/white"/>
 
@@ -23,13 +49,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="10dp"
         android:background="@color/colorPrimary"
-        android:text="mQooAppOpenSDK.restorePurchases()"
+        android:text="QooAppOpenSDK.restorePurchases()"
         android:textAllCaps="false"
         android:textColor="@android:color/white"/>
-
 
     <ListView
         android:id="@+id/list_view"

@@ -4,26 +4,30 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.qooapp.opensdk.QooAppOpenSDK;
 import com.qooapp.opensdk.common.PaymentCallback;
 import com.qooapp.opensdk.common.QooAppCallback;
+import com.qooapp.opensdk.sample.model.OrderBean;
 import com.qooapp.opensdk.sample.model.Product;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,38 +41,44 @@ public class MainActivity extends AppCompatActivity {
 
     private final String TAG = "MainActivity";
 
-    //The QooAppOpenSDK created a singleton
     private View mLayoutInit;
-    private View mLayoutCheckLicense;
-    private View mLayoutProducts;
+    private View mLayoutFunction;
+
     private ListView mListView;
-    private List<Product> mProductsList = new ArrayList<>();
-    private ProductAdapter mAdapter;
+    private TextView mTvTips;
+    private Button mBtnCheckReward;
+    private Button mBtnVerify;
     private Button mBtnProducts;
     private Button mBtnPurchased;
+
     private ProgressDialog progressDialog;
+
+    private List<Product> mProductsList = new ArrayList<>();
+    private List<OrderBean> mOrdersList = new ArrayList<>();
+
+    private ProductAdapter mAdapter;
 
     private final int TYPE_ERROR = 0;
 
     private final int TYPE_LOGIN = 1;
 
-    private final int TYPE_VERIFY = 2;
+    private final int TYPE_REWARD = 2;
 
-    private final int TYPE_QUERY_PRODUCT = 3;
+    private final int TYPE_VERIFY = 3;
 
-    private final int TYPE_QUERY_RECORD = 4;
+    private final int TYPE_QUERY_PRODUCT = 4;
+
+    private final int TYPE_QUERY_RECORD = 5;
 
     private QooAppCallback mInitCallback = new QooAppCallback() {
         @Override
         public void onSuccess(String response) {
             displayResult(TYPE_LOGIN, response);
-            hideProgress();
         }
 
         @Override
         public void onError(String error) {
             displayResult(TYPE_ERROR, error);
-            hideProgress();
         }
     };
 
@@ -78,15 +88,20 @@ public class MainActivity extends AppCompatActivity {
 
             //Handle success case
             try {
+                /**
+                 * 1、purchase success，then please distribute goods to player.
+                 * 2、When player get product, you must call consumePurchase();
+                 */
                 JSONObject obj = new JSONObject(json);
                 JSONObject jsonObject = obj.getJSONObject("data");
-                //We have product. Consuming it.
-                String purchase_id = jsonObject.optString("purchase_id");
-                final String token = jsonObject.optString("token");
-                consumePurchase(token, purchase_id);
-                String product_id = jsonObject.optString("product_id");
-                QooAppOpenSDK.getInstance().closePaymentUI();
-                showToast(MainActivity.this, "Purchasing successful，Consuming...[purchase_id:" + purchase_id + ",product_id:" + product_id + ",token:" + token);
+
+                Gson gson = new Gson();
+                OrderBean orderBean = gson.fromJson(jsonObject.toString(), OrderBean.class);
+                showToast(MainActivity.this, "Purchasing successful，Consuming...[purchase_id:" + orderBean.getPurchase_id() + ",token:" + orderBean.getToken());
+                showPaymentDialog((dialog, which) -> {
+                    showProgress();
+                    consumePurchase(orderBean.getPurchase_id(), orderBean.getToken());
+                });
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -105,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("QooAppOpenSDK: Initialize  v"+BuildConfig.VERSION_NAME);
@@ -117,9 +132,11 @@ public class MainActivity extends AppCompatActivity {
         Button btnInit = this.findViewById(R.id.btn_init);
         mBtnProducts = this.findViewById(R.id.btn_products);
         mLayoutInit = this.findViewById(R.id.layout_init);
-        mLayoutCheckLicense = this.findViewById(R.id.layout_verify);
-        mLayoutProducts = this.findViewById(R.id.layout_products);
+        mLayoutFunction = this.findViewById(R.id.layout_function);
+        mTvTips = findViewById(R.id.btn_skip);
         mBtnPurchased = this.findViewById(R.id.btn_purchased);
+        mBtnCheckReward = findViewById(R.id.btn_check_reward);
+        mBtnVerify = findViewById(R.id.btn_verify);
         mListView = this.findViewById(R.id.list_view);
         btnInit.setOnClickListener(v -> {
 
@@ -130,39 +147,47 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        findViewById(R.id.btnClear).setOnClickListener(v -> {
-            QooAppOpenSDK.getInstance().logout(new QooAppCallback() {
-                @Override
-                public void onSuccess(String response) {
-                    showToast(MainActivity.this, response);
-                }
+        findViewById(R.id.btn_logout).setOnClickListener(v -> {
+            try {
+                QooAppOpenSDK.getInstance().logout(new QooAppCallback() {
+                    @Override
+                    public void onSuccess(String response) {
+                        showToast(MainActivity.this, response);
+                    }
 
-                @Override
-                public void onError(String error) {
-                    showToast(MainActivity.this, error);
+                    @Override
+                    public void onError(String error) {
+                        showToast(MainActivity.this, error);
 
-                }
-            }, MainActivity.this);
+                    }
+                }, MainActivity.this);
+            } catch (Exception e) {
+                e.printStackTrace();
+                showToast(MainActivity.this, e.getMessage());
+            }
         });
 
-        findViewById(R.id.re_get).setOnClickListener(v -> {
+        mBtnCheckReward.setOnClickListener(v -> {
             showProgress();
-            QooAppOpenSDK.getInstance().queryProducts(new QooAppCallback() {
+            QooAppOpenSDK.getInstance().checkReward(new QooAppCallback() {
+
                 @Override
-                public void onSuccess(String result) {
-                    hideProgress();
-                    displayResult(TYPE_QUERY_PRODUCT, result);
+                public void onSuccess(String info) {
+                    // verification succeed
+                    displayResult(TYPE_REWARD, info);
                 }
 
                 @Override
                 public void onError(String error) {
+                    // For unknown reason, verification cannot be done.
+                    // Please disallow access for proper protection.
                     displayResult(TYPE_ERROR, error);
-                    hideProgress();
                 }
             });
         });
 
-        findViewById(R.id.btn_verify).setOnClickListener(v -> {
+        mBtnVerify.setOnClickListener(v -> {
+            showProgress();
             QooAppOpenSDK.getInstance().checkLicense(new QooAppCallback() {
 
                 @Override
@@ -185,19 +210,17 @@ public class MainActivity extends AppCompatActivity {
             QooAppOpenSDK.getInstance().queryProducts(new QooAppCallback() {
                 @Override
                 public void onSuccess(String result) {
-                    hideProgress();
                     displayResult(TYPE_QUERY_PRODUCT, result);
                 }
 
                 @Override
                 public void onError(String error) {
                     displayResult(TYPE_ERROR, error);
-                    hideProgress();
                 }
             });
         });
 
-        findViewById(R.id.btn_purchased).setOnClickListener(v -> {
+        mBtnPurchased.setOnClickListener(v -> {
             showProgress();
             QooAppOpenSDK.getInstance().restorePurchases(new QooAppCallback() {
                 @Override
@@ -226,18 +249,20 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void consumePurchase(String token, String purchase_id) {
+    public void consumePurchase(String purchase_id, String token) {
         QooAppOpenSDK.getInstance().consume(new QooAppCallback() {
             @Override
             public void onSuccess(String response) {
                 showToast(MainActivity.this, "Consumption successful!");
                 Log.d("mQooAppOpenSDK", "response = "+response);
+                hideProgress();
                 QooAppOpenSDK.getInstance().closePaymentUI();
             }
 
             @Override
             public void onError(String error) {
                 Log.e("mQooAppOpenSDK", "error = "+error);
+                hideProgress();
                 showToast(MainActivity.this, "Consuming error:" + error);
             }
         }, purchase_id, token);
@@ -259,30 +284,20 @@ public class MainActivity extends AppCompatActivity {
      */
     private void displayResult(int type, final String result) {
         Log.d(TAG,"type = "+type+", result = "+result);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(result);
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (type) {
-                    case TYPE_LOGIN:
-                        showVerifyView();
-                        break;
-                    case TYPE_VERIFY:
-                        showProductsView();
-                        break;
-                    case TYPE_QUERY_PRODUCT:
-                        parseProducts(result);
-                        break;
-                    case TYPE_QUERY_RECORD:
-                        parseRecords(result);
-                        break;
-                }
+        hideProgress();
+        showDialog(result, (dialog, which) -> {
+            switch (type) {
+                case TYPE_LOGIN:
+                    showInitSuccessView();
+                    break;
+                case TYPE_QUERY_PRODUCT:
+                    parseProducts(result);
+                    break;
+                case TYPE_QUERY_RECORD:
+                    parseRecords(result);
+                    break;
             }
         });
-        builder.setCancelable(false);
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     /**
@@ -296,30 +311,16 @@ public class MainActivity extends AppCompatActivity {
             JSONArray dataArray = jsonObject.getJSONArray("data");
             if (dataArray != null) {
                 mProductsList.clear();
-                for (int i = 0, l = dataArray.length(); i < l; i++) {
-                    JSONObject productObject = dataArray.getJSONObject(i);
-                    Product product = new Product();
+                mProductsList = parseString2List(dataArray.toString(), Product.class);
 
-
-                    product.setProductId(productObject.optString("product_id"));
-                    product.setName(productObject.optString("name"));
-                    JSONObject priceObj = productObject.getJSONObject("price");
-                    JSONObject paypalObj = priceObj.getJSONObject("paypal");
-
-                    product.setAmount(paypalObj.optDouble("amount"));
-                    product.setCurrency(paypalObj.optString("currency"));
-
-                    mProductsList.add(product);
-                }
-                mAdapter = new ProductAdapter(this, mProductsList);
+                ProductAdapter adapter = new ProductAdapter(this, mProductsList);
                 mListView.setVisibility(View.VISIBLE);
-                mListView.setAdapter(mAdapter);
+                mListView.setAdapter(adapter);
                 mListView.setOnItemClickListener((parent, view, position, id) -> {
                     final Product product = mProductsList.get(position);
-                    QooAppOpenSDK.getInstance().purchase(mPaymentCallback, MainActivity.this, product.getProductId(), "cporderid----", "dev-0110");
+                    QooAppOpenSDK.getInstance().purchase(mPaymentCallback, MainActivity.this, product.getProduct_id(), "cporderid----", "dev-0110");
                 });
-                mBtnProducts.setVisibility(View.GONE);
-                mBtnPurchased.setVisibility(View.GONE);
+                showProducts("Products");
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -338,28 +339,18 @@ public class MainActivity extends AppCompatActivity {
             JSONArray dataArray = obj.getJSONArray("data");
 
             if (dataArray != null) {
-                mProductsList.clear();
-                for (int i = 0, l = dataArray.length(); i < l; i++) {
-                    JSONObject productObject = dataArray.getJSONObject(i);
-                    Product product = new Product();
-                    product.setProductId(productObject.optString("product_id"));
-                    product.setPurchase_id(productObject.optString("purchase_id"));
-                    product.setToken(productObject.optString("token"));
-                    mProductsList.add(product);
-                }
-                mAdapter = new ProductAdapter(this, mProductsList);
-                mListView.setVisibility(View.VISIBLE);
-                mListView.setAdapter(mAdapter);
+                mOrdersList = parseString2List(dataArray.toString(), OrderBean.class);
+                OrdersAdapter adapter = new OrdersAdapter(this, mOrdersList);
+                mListView.setAdapter(adapter);
                 mListView.setOnItemClickListener((parent, view, position, id) -> {
-                    final Product product = mProductsList.get(position);
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setMessage("Consume the product?");
-                    builder.setPositiveButton("Ok", (dialog, which) -> consumePurchase(product.getToken(), product.getPurchase_id()));
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+                    final OrderBean orderBean = mOrdersList.get(position);
+                    showDialog("consume this order? ",  (dialog, which) -> {
+                        showProgress();
+                        consumePurchase(orderBean.getPurchase_id(), orderBean.getToken());
+                    });
                 });
+                showProducts("Records");
             }
-            mBtnProducts.setVisibility(View.GONE);
             mBtnPurchased.setVisibility(View.GONE);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -368,36 +359,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showInitView() {
-        mLayoutInit.setVisibility(View.VISIBLE);
-        mLayoutCheckLicense.setVisibility(View.GONE);
-        mLayoutProducts.setVisibility(View.GONE);
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         setTitle("QooAppOpenSDK: Initialize");
+        mLayoutInit.setVisibility(View.VISIBLE);
+        mLayoutFunction.setVisibility(View.GONE);
     }
 
-    private void showVerifyView() {
-        mLayoutCheckLicense.setVisibility(View.VISIBLE);
-        mLayoutProducts.setVisibility(View.GONE);
+    private void showInitSuccessView() {
+        setTitle("functions");
+        mListView.setVisibility(View.GONE);
         mLayoutInit.setVisibility(View.GONE);
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Verify");
-        TextView tvSkip = findViewById(R.id.btn_skip);
-        tvSkip.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
-        tvSkip.getPaint().setAntiAlias(true);
-        tvSkip.setOnClickListener(v -> showProductsView());
-    }
-
-    private void showProductsView() {
-        mLayoutInit.setVisibility(View.GONE);
-        mLayoutCheckLicense.setVisibility(View.GONE);
-        mLayoutProducts.setVisibility(View.VISIBLE);
+        mLayoutFunction.setVisibility(View.VISIBLE);
+        mTvTips.setVisibility(View.VISIBLE);
+        mBtnCheckReward.setVisibility(View.VISIBLE);
+        mBtnVerify.setVisibility(View.VISIBLE);
         mBtnProducts.setVisibility(View.VISIBLE);
         mBtnPurchased.setVisibility(View.VISIBLE);
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Products");
+    }
+
+    private void showProducts(String title) {
+        setTitle(title);
+        mTvTips.setVisibility(View.GONE);
+        mBtnCheckReward.setVisibility(View.GONE);
+        mBtnVerify.setVisibility(View.GONE);
+        mBtnProducts.setVisibility(View.GONE);
+        mBtnPurchased.setVisibility(View.GONE);
+        mListView.setVisibility(View.VISIBLE);
     }
 
     private void showProgress() {
@@ -421,17 +407,67 @@ public class MainActivity extends AppCompatActivity {
             mAdapter.clear();
             mAdapter.notifyDataSetChanged();
         }
-        if (mLayoutProducts.getVisibility() == View.VISIBLE) {
+        if (mLayoutFunction.getVisibility() == View.VISIBLE) {
             if (mListView.getVisibility() == View.VISIBLE) {
-                mListView.setVisibility(View.GONE);
-                showProductsView();
+                showInitSuccessView();
             } else {
-                showVerifyView();
+                showInitView();
             }
-        } else if (mLayoutCheckLicense.getVisibility() == View.VISIBLE) {
-            showInitView();
         } else {
             finish();
+        }
+    }
+
+    private void showDialog(String title, DialogInterface.OnClickListener listener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        if (title != null) {
+            builder.setMessage(title);
+        }
+        builder.setPositiveButton("Ok", listener);
+        AlertDialog dialog = builder.create();
+        builder.setCancelable(false);
+        dialog.show();
+    }
+
+    private void showPaymentDialog(DialogInterface.OnClickListener listener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage("After the payment is successful, the goods need to be distributed. After the goods are successfully distributed, QooAppOpenSDK.getInstance().consume() needs to be called");
+        builder.setPositiveButton("consume", listener);
+        builder.setNegativeButton("Cancel", null);
+        AlertDialog dialog = builder.create();
+        builder.setCancelable(false);
+        dialog.show();
+    }
+
+    /**
+     * @return
+     */
+    private  <T> List<T> parseString2List(String json, Class clazz) {
+        Type type = new ParameterizedTypeImpl(clazz);
+        List<T> list =  new Gson().fromJson(json, type);
+        return list;
+    }
+
+    class ParameterizedTypeImpl implements ParameterizedType {
+        Class clazz;
+
+        public ParameterizedTypeImpl(Class clz) {
+            clazz = clz;
+        }
+
+        @Override
+        public Type[] getActualTypeArguments() {
+            return new Type[]{clazz};
+        }
+
+        @Override
+        public Type getRawType() {
+            return List.class;
+        }
+
+        @Override
+        public Type getOwnerType() {
+            return null;
         }
     }
 }
