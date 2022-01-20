@@ -47,7 +47,7 @@
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:common:1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.core:common:1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.6" level="project" />
-    <orderEntry type="library" name="Gradle: ./app/libs/qooapp-opensdk-v1.2.0.aar" level="project" />
+    <orderEntry type="library" name="Gradle: ./app/libs/qooapp-opensdk-1.2.1.aar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:appcompat-v7:27.1.1@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-fragment:27.1.1@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:animated-vector-drawable:27.1.1@aar" level="project" />
